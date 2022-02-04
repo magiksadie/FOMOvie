@@ -9,6 +9,8 @@ getWatchmodeResponse();
 function getWatchmodeResponse() {
     var requestUrl = "https://api.watchmode.com/v1/search/?apiKey=yiuf9OlLjaQLmIWWTJqlyJi6QSFdlkvTHpBC8nwU&search_field=imdb_id&search_value=" + imdbResponse;
 
+    console.log(requestUrl);
+
     fetch(requestUrl)
     .then( function(response) {
         console.log(response.json());
