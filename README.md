@@ -20,7 +20,9 @@ SO THAT I don’t miss out on a film
 
 ### Screenshot of FOMOvie
 
-![Picture of the FOMOvie app](assets/images/screenshot.gif)
+![Picture of the FOMOvie app](assets/images/screenshot.png)
+
+Note: the above is a placeholder image that will be updated before release.
 
 ### Public APIs Used
 
