@@ -1,65 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <link rel="stylesheet" href="./assets/css/style.css">
-    <title>FOMOvie</title>
-</head>
-<body>
-    <header class="hero">
-        <div class="hero-body">
-          <p class="FOMOvie">
-           FOMOVie
-          </p>
-          <p class="subtitle">
-            Hero subtitle
-          </p>
-        </div>
-    </header>
-    <div class="tile is-ancestor">
-        <div class="tile is-parent is-4 is-vertical">
-          <article class="tile is-child box">
-            <p class="title">FOMOvie Search!</p>
-            <form class="box">
-                <div class="field">
-                  <label class="label">Movie Name</label>
-                  <div class="control">
-                    <input class="input" type="movie" placeholder="">
-                  </div>
-                </div>
-                <!--Open Modal-->
-                <button id ="btnModal" class="button is-primary">Search</button>
-                <!--Modal Content-->
-                <div id="searchModal" class="modal">
-                  <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <p>PLACEHOLDER MODAL TEXT</p>
+
+  <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" />
+      <link rel="stylesheet" href="./assets/css/style.css" />
+      <title>FOMOvie</title>
+  </head>
+
+  <body>
+
+      <header class="hero">
+          <div class="hero-body">
+            <p class="FOMOvie">
+            FOMOVie
+            </p>
+            <p class="subtitle">
+              Hero subtitle
+            </p>
+          </div>
+      </header>
+      
+      <div class="tile is-ancestor">
+          <div class="tile is-parent is-4 is-vertical">
+            <article class="tile is-child box">
+              <p class="title">FOMOvie Search!</p>
+              <form class="box">
+                  <div class="field">
+                    <label class="label">Movie Name</label>
+                    <div class="control">
+                      <input class="input" type="movie" placeholder="">
                     </div>
                   </div>
-              </form>
-            <p class="subtitle"></p>
-          </article>
-        </div>
-        <div class="tile is-parent is-4 is-vertical">
-          <article class="tile is-child box">
-            <p class="title">Library</p>
-            <p class="subtitle">"content"</p>
-            <p>Library cards/tile</p>
-          </article>
-        </div>
-        <div class="tile is-parent is-4 is-vertical">
-          <article class="tile is-child box">
-            <p class="title">Watched</p>
-            <p class="subtitle">"content"</p>
-            <div class="content">
-              <p>Watched cards/tiles</p>
-            </div>
-          </article>
-        </div>
-    </div>
-    <script rel="script" src="./assets/js/script.js"></script>
-</body>
+                  <!--Open Modal-->
+                  <button id ="btnModal" class="button is-primary">Search</button>
+                  <!--Modal Content-->
+                  <div id="searchModal" class="modal">
+                    <div class="modal-content">
+                      <span class="close">&times;</span>
+                      <p>PLACEHOLDER MODAL TEXT</p>
+                      </div>
+                    </div>
+                </form>
+              <p class="subtitle"></p>
+            </article>
+          </div>
+          <div class="tile is-parent is-4 is-vertical">
+            <article class="tile is-child box">
+              <p class="title">Library</p>
+              <p class="subtitle">"content"</p>
+              <p>Library cards/tile</p>
+            </article>
+          </div>
+          <div class="tile is-parent is-4 is-vertical">
+            <article class="tile is-child box">
+              <p class="title">Watched</p>
+              <p class="subtitle">"content"</p>
+              <div class="content">
+                <p>Watched cards/tiles</p>
+              </div>
+            </article>
+          </div>
+      </div>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
+      <script rel="script" src="./assets/js/script.js"></script>
+  </body>
+
 </html>
