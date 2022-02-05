@@ -1,17 +1,75 @@
+// OMDB API key
+// 928c9de
+// TMDB API key
+// ec41a34f528d3376af8f21290ccf32a1
 // Watchmode API key
 // yiuf9OlLjaQLmIWWTJqlyJi6QSFdlkvTHpBC8nwU
 
-// Hardcoding a placeholder IMDB title ID until that API response is up & running
-var imdbResponse = "tt0103064";
+// Looks like we probably won't need to use TMDB
 
-var watchmodeResponse = getWatchmodeResponse();
+// Hardcoding a placeholder OMDB title ID until that API response is up & running
+var searchString = "Terminator 2"; // tt0103064
 
-function getWatchmodeResponse() {
-    var requestUrl = "https://api.watchmode.com/v1/search/?apiKey=yiuf9OlLjaQLmIWWTJqlyJi6QSFdlkvTHpBC8nwU&search_field=imdb_id&search_value=" + imdbResponse;
+var omdbResponse;
+var watchmodeResponse;
+var tmdbResponse;
 
-    console.log(requestUrl);
+getOmdbResponse(searchString);
 
-    fetch(requestUrl)
+function getOmdbResponse(searchString) {
+  var omdbUrl = "http://www.omdbapi.com/?apikey=928c9de&t=" + searchString;
+
+  fetch(omdbUrl)
+  .then(function(omdbResponse) {
+    // Check if we received an API response
+    if (omdbResponse.ok) {
+      omdbResponse.json()
+      .then(function(omdbData) {
+        // Do stuff with the data in here
+        console.log(omdbData);
+        console.log(omdbData.imdbID);
+        getWatchmodeResponse(omdbData.imdbID);
+      });
+    } else {
+      // Add error handling that doesn't use alert
+      alert("Error: " + omdbResponse.statusText);
+    }
+  })
+  .catch(function(omdbError) {
+    // Also eliminate this alert
+    alert("Unable to connect to OMDB");
+  });
+};
+
+// function getTmdbResponse(searchTmdb) {
+//   var tmdbUrl = "https://api.themoviedb.org/3/find/" + searchTmdb + "?api_key=ec41a34f528d3376af8f21290ccf32a1&external_source=imdb_id";
+
+//   fetch(tmdbUrl)
+//   .then(function(tmdbResponse) {
+//     if (tmdbResponse.ok) {
+//       tmdbResponse.json()
+//       .then(function(tmdbData) {
+//         console.log(tmdbData);
+//         console.log(tmdbData.movie_results[0].id);
+//         console.log(tmdbData.movie_results[0].imdb_id);
+//         getWatchmodeResponse(tmdbData.movie_results[0].imdb_id);
+        
+//       });
+//     } else {
+//       // Error handling
+//       alert("Error: " + tmdbResponse.statusText);
+//     }
+//   })
+//   .catch(function(tmdbError) {
+//     // Error handling
+//     alert("Unable to connect to TMDB");
+//   });
+// };
+
+function getWatchmodeResponse(searchWatchmode) {
+    var watchmodeUrl = "https://api.watchmode.com/v1/search/?apiKey=yiuf9OlLjaQLmIWWTJqlyJi6QSFdlkvTHpBC8nwU&search_field=imdb_id&search_value=" + searchWatchmode;
+
+    fetch(watchmodeUrl)
     .then(function(response) {
         return response.json();
     })
@@ -19,8 +77,6 @@ function getWatchmodeResponse() {
         console.log(data);
         console.log( JSON.stringify(data) );
     })
-}
-
 }
 
 // Get the modal
