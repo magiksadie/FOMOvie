@@ -14,7 +14,7 @@ var omdbResponse;
 var watchmodeResponse;
 var tmdbResponse;
 
-getOmdbResponse(searchString);
+//getOmdbResponse(searchString);
 
 function getOmdbResponse(searchString) {
   var omdbUrl = "http://www.omdbapi.com/?apikey=928c9de&t=" + searchString;
@@ -78,6 +78,8 @@ function getWatchmodeResponse(searchWatchmode) {
         console.log( JSON.stringify(data) );
     })
 }
+//Input field
+var searchInput = document.getElementById("searchInput");
 
 // Get the modal
 var modal = document.getElementById("searchModal");
@@ -89,6 +91,8 @@ var span = document.getElementsByClassName("close")[0];
 btn.onclick = function(event) {
     event.preventDefault();
     modal.style.display = "block";
+    getOmdbResponse(searchInput.value);
+    console.log(searchInput.value);
 }
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
