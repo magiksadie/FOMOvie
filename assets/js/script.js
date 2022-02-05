@@ -13,6 +13,8 @@ var searchString = "Terminator 2"; // tt0103064
 var omdbResponse;
 var watchmodeResponse;
 var tmdbResponse;
+//Modal Content
+var modalContent = document.querySelector(".modal-content");
 
 //getOmdbResponse(searchString);
 
@@ -25,10 +27,34 @@ function getOmdbResponse(searchString) {
     if (omdbResponse.ok) {
       omdbResponse.json()
       .then(function(omdbData) {
-        // Do stuff with the data in here
+        // Modal Content
         console.log(omdbData);
         console.log(omdbData.imdbID);
-        getWatchmodeResponse(omdbData.imdbID);
+        // Movie Title
+        var movieTitle = document.createElement("h3");
+        movieTitle.textContent = omdbData.Title;
+        modalContent.appendChild(movieTitle);
+        //Movie Year
+        var movieYear = document.createElement("h4");
+        movieYear.textContent = omdbData.Year;
+        modalContent.appendChild(movieYear);
+        // Movie Poster
+        var moviePoster = document.createElement("img");
+        moviePoster.src = omdbData.Poster;
+        modalContent.appendChild(moviePoster);
+        // Movie Plot
+        var moviePlot = document.createElement("h4");
+        moviePlot.textContent = omdbData.Plot;
+        modalContent.appendChild(moviePlot);
+        // Movie Actors
+        var movieActors = document.createElement("h4");
+        movieActors.textContent = "Actors: " + omdbData.Actors;
+        modalContent.appendChild(movieActors);
+        // Movie Director 
+        var movieDirector = document.createElement("h4");
+        movieDirector.textContent = "Director: " + omdbData.Director;
+        modalContent.appendChild(movieDirector);
+      //getWatchmodeResponse(omdbData.imdbID);
       });
     } else {
       // Add error handling that doesn't use alert
