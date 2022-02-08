@@ -1,8 +1,3 @@
-.tile {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-}
 /* Modal (background) */
 .modal {
     display: none; /* Hidden by default */
@@ -23,6 +18,8 @@
     padding: 20px;
     border: 1px solid #888;
     width: 80%; /* PLACEHOLDER TBD*/
+    text-align: center;
+    align-items: center;
   }
   /* The Close Button for the Modal*/
   .close {
@@ -36,4 +33,13 @@
     color: black;
     text-decoration: none;
     cursor: pointer;
+  }
+
+  #button{
+    background:#363636 ;
+  }
+
+  h3{
+    font-size: 30px;
+    align-items: center;
   }
