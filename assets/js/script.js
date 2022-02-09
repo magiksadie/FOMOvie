@@ -13,6 +13,7 @@ var searchString = "Terminator 2"; // tt0103064
 var omdbResponse;
 var watchmodeResponse;
 var tmdbResponse;
+var saveMovieBtn = document.createElement("button");
 //Modal Content
 var modalContent = document.querySelector(".modal-content");
 var toWatch = document.querySelector("#to-watch");
@@ -53,7 +54,7 @@ function getOmdbResponse(searchString) {
           var movieDirector = document.createElement("h4");
           movieDirector.textContent = "Director: " + omdbData.Director;
           modalContent.appendChild(movieDirector);
-          var saveMovieBtn = document.createElement("button");
+          // Save Movie Button
           saveMovieBtn.textContent = "Save to Library";
           modalContent.appendChild(saveMovieBtn);
           saveMovie(omdbData);
@@ -111,7 +112,6 @@ function getWatchmodeResponse(searchWatchmode) {
 }
 //Input field
 var searchInput = document.getElementById("searchInput");
-
 // Get the modal
 var modal = document.getElementById("searchModal");
 // Get the button that opens the modal
@@ -151,3 +151,12 @@ function saveMovie(omdbResponse) {
   movieCard.appendChild(moviePoster);
   toWatch.appendChild(movieCard);
 }
+//Save Local Data
+saveMovieBtn.addEventListener("click", (function (event) {
+  console.log("hello");
+  event.preventDefault();
+  var value = "movieCard, movieTitle, movieYear";
+  localStorage.setItem("library", value);
+}));
+//Retrieve Local Data
+$(".library-content").val(localStorage.getItem(saveMovie));
