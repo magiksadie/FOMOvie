@@ -53,10 +53,10 @@ function getOmdbResponse(searchString) {
           var movieDirector = document.createElement("h4");
           movieDirector.textContent = "Director: " + omdbData.Director;
           modalContent.appendChild(movieDirector);
-          var saveMovie = document.createElement("button");
-          saveMovie.textContent = "Save to Library";
-          modalContent.appendChild(saveMovie);
-          saveMovie();
+          var saveMovieBtn = document.createElement("button");
+          saveMovieBtn.textContent = "Save to Library";
+          modalContent.appendChild(saveMovieBtn);
+          saveMovie(omdbData);
           //getWatchmodeResponse(omdbData.imdbID);
         });
       } else {
@@ -136,7 +136,7 @@ window.onclick = function (event) {
   }
 };
 
-function saveMovie() {
+function saveMovie(omdbResponse) {
   var movieCard = document.createElement("div");
   var movieTitle = document.createElement("h3");
   movieTitle.textContent = omdbResponse.Title;
