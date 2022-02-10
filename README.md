@@ -35,4 +35,7 @@ Please check the repository's commit history and associated comments to see more
 
 ### Credits
 
-TBD
+* Daniel B.
+* Eric K.
+* Guled O.
+* Sadie H.
