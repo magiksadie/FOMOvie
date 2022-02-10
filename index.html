@@ -1,55 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <title>Document</title>
-</head>
-<body>
-    <header class="hero">
-        <div class="hero-body">
-          <p class="FOMOvie">
-           FOMOVie
-          </p>
-          <p class="subtitle">
-            Hero subtitle
-          </p>
-        </div>
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FOMOvie</title>
+
+    <!-- Bringing in styles, fonts, etc.  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+  </head>
+
+  <body>
+    <!-- Header style and title -->
+    <header class="hero is-black has-text-centered is-size-4">
+      <div class="hero-body">
+        <p class="fomovie">FOMOvie</p>
+      </div>
+      
+      <p class="subtitle">FOMO [fōmō] <i>(noun)</i>: a state of mental or emotional strain caused by the fear of missing out</p>
+
     </header>
-    <div class="tile is-ancestor">
-        <div class="tile is-parent is-4 is-vertical">
-          <article class="tile is-child box">
-            <p class="title">FOMOvie Search!</p>
-            <form class="box">
-                <div class="field">
-                  <label class="label">Movie Name</label>
-                  <div class="control">
-                    <input class="input" type="movie" placeholder="">
-                  </div>
-                </div>
-                <button class="button is-primary">Search</button>
-              </form>
-            <p class="subtitle"></p>
-          </article>
-        </div>
-        <div class="tile is-parent is-4 is-vertical">
-          <article class="tile is-child box">
-            <p class="title">Library</p>
-            <p class="subtitle">"content"</p>
-            <p>Library cards/tile</p>
-          </article>
-        </div>
-        <div class="tile is-parent is-4 is-vertical">
-          <article class="tile is-child box">
-            <p class="title">Watched</p>
-            <p class="subtitle">"content"</p>
-            <div class="content">
-              <p>Watched cards/tiles</p>
+
+    <main class="tile is-ancestor is-vcentered is-centered px-5 py-5 ">
+      <!-- Ancestor tile/ search box/ resposive Features using Bulma -->
+    <main class="tile is-ancestor is-vcentered is-centered">
+      <section class="tile is-parent is-4 is-vertical">
+
+        <article class="tile is-child box">
+          <p class="title has-text-centered">FOMOvie Search!</p>
+
+          <form class="box">
+            <div class="field">
+              <label class="label has-text-centered">Enter A Movie Title:</label>
+              <div class="control has-icons-left">
+                <input class="input is-focused is-rounded" id="searchInput" type="movie" placeholder="" />
+                <span class="icon is-left"><i class="fa-solid fa-video"></i></span>
+              </div>
             </div>
-          </article>
+
+            <!--Open Modal-->
+            <button id="btnModal" class="button is-centered is-fullwidth is-rounded">Search</button>
+
+            <!--Modal Content-->
+            <div id="searchModal" class="modal">
+              <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="modalInside"></div>
+              </div>
+            </div>
+          </form>
+
+        </article>
+
+      </section>
+
+      <section class="tile is-parent is-4 is-vertical " id="library">
+        <article class="tile is-child box" id="to-watch">
+          <p class="title has-text-centered">Library</p>
+          <div class="level" id="placeholderHolder">
+            <div class="level-item has-text-centered ">
+              <div class="place">
+            <img src="./assets/images/placeholder.jpg" alt=""></img>
+          </div>
+          </div>
         </div>
-    </div>
-</body>
+
+          <!-- We insert saved searches here -->
+          <div class="content" id="libraryCards"></div>
+
+        </article>
+      </section>
+
+      <section class="tile is-parent is-4 is-vertical is-flex " id="watched">
+        <article class="tile is-child box">
+          <p class="title has-text-centered">Watched</p>
+
+          <!-- And this div holds watched titles -->
+          <div class="content" id="watchedCards"></div>
+
+        </article>
+      </section>
+    </main>
+
+    <footer class="hero is-dark has-text-centered is-size-5">
+          <!-- Contributions Footer (links to Github)-->
+    <footer class="hero is-dark has-text-centered is-size-6">
+      <div class="hero-body">
+        <p class="FOMOvie">Contributed By
+          <br />
+          <a href="https://github.com/Prolix19/">Daniel B.</a>
+          <br />
+          <a href="https://github.com/Erock42/">Eric K.</a>
+          <br />
+          <a href="https://github.com/ItzGuled/">Guled O.</a>
+          <br />
+          <a href="https://github.com/magiksadie/">Sadie H.</a>
+        </p>
+      </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script rel="script" src="./assets/js/script.js"></script>
+  </body>
 </html>
