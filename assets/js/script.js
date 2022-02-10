@@ -1,20 +1,37 @@
 var searchInput = document.getElementById("searchInput"); // Get the input field to be able to read its value
+var btn = document.getElementById("btnModal"); // And the search button
 
 var omdbResponse; // To hold the OMDB API response
 var watchmodeResponse; // To hold the Watchmode API response
 
 var modal = document.getElementById("searchModal"); // Get the modal
 var modalContent = document.querySelector(".modal-content"); // Get the div inside the modal
-var btn = document.getElementById("btnModal"); // And the modal button
 var span = document.getElementsByClassName("close")[0]; // This span contains a button to close the modal
+var libBtn = document.querySelector("#libraryBtn");
+var libCount = 0;
+var latestTitle = ""; // Hold OMDB API results for future use
+var latestYear = "";
+var latestPoster = "";
+var latestImdbId = "";
 
 var emptyError = document.createElement("p"); // Create a message for if the user tries to search on nothing
 emptyError.textContent = "Please enter a title before searching"
 
+// Add load localStorage function
+
+libBtn.onclick = function(event) {
+  event.preventDefault();
+  saveMovie();
+  modal.style.display = "none";
+  $("#modalInside").empty();
+  $("#libraryBtn").attr("style", "display: none");
+};
+
 // When the user clicks on the button, open the modal
-btn.onclick = function (event) {
+btn.onclick = function(event) {
   event.preventDefault();
   $("#modalInside").empty();
+  $("#libraryBtn").attr("style", "display: none");
   modal.style.display = "block";
   if (searchInput.value == "") {
     $("#modalInside").append(emptyError); // Error out if they forgot to enter something
@@ -25,21 +42,23 @@ btn.onclick = function (event) {
 };
 
 // When the user clicks on the X, clear the modal and close it
-span.onclick = function () {
+span.onclick = function() {
   $("#modalInside").empty();
+  $("#libraryBtn").attr("style", "display: none");
   modal.style.display = "none";
 };
 
 // Or if they click anywhere outside the modal, clear & close it
 window.onclick = function (event) {
-  if (event.target == modal) {
+if (event.target == modal) {
     $("modalInside").empty();
+    $("#libraryBtn").attr("style", "display: none");
     modal.style.display = "none";
   }
 };
 
 function getOmdbResponse(searchString) {
-  var omdbUrl = "http://www.omdbapi.com/?apikey=928c9de&t=" + searchString;
+  var omdbUrl = "http://www.omdbapi.com/?apikey=928c9de&type=movie&t=" + searchString;
 
   fetch(omdbUrl)
     .then(function (omdbResponse) {
@@ -50,10 +69,13 @@ function getOmdbResponse(searchString) {
           // Handle error if title doesn't exist, etc.
           if(omdbData.Error) {
             $("#modalInside").empty();
+            $("#libraryBtn").attr("style", "display: none");
             $("#modalInside").append("Error: " + omdbData.Error + " Try a different search.");
           } else {
             $("#modalInside").empty();
+            $("#libraryBtn").attr("style", "display: none");
             searchInput.value = "";
+            latestImdbId = omdbData.imdbID;
             showSearchResults(omdbData);
         }
         });
@@ -67,6 +89,7 @@ function getOmdbResponse(searchString) {
     });
 }
 
+// Makes a div with the OMDB info and displays it in the modal
 function showSearchResults(omdbData) {
   var searchCard = $("<div class='searchCard'>");
   $("#modalInside").append(searchCard);
@@ -76,9 +99,31 @@ function showSearchResults(omdbData) {
   var moviePlot = $("<p>").html("<b>Plot synopsis:</b> " + omdbData.Plot);
   var movieDirector = $("<p>").html("<b>Directed by:</b> " + omdbData.Director);
   var movieActors = $("<p>").html("<b>Starring:</b> " + omdbData.Actors);
-  var saveMovieBtn = $("<button>").text("Save to Library").attr("style", "border: 2px solid #f5c518; background-color: #f5c518;").attr("class", "button is-centered is-rounded");
-  $(".searchCard").append(movieTitle, movieYear, moviePoster, moviePlot, movieDirector, movieActors, saveMovieBtn);
+
+  $(".searchCard").append(movieTitle, movieYear, moviePoster, moviePlot, movieDirector, movieActors);
+  $("#libraryBtn").attr("style", "display: inline-block");
+
+  // Save some results to globals in case they're needed later
+  latestTitle = omdbData.Title;
+  latestYear = omdbData.Year;
+  latestPoster = omdbData.Poster;
 };
+
+// Save movie to library when "Add to Library" is clicked
+function saveMovie() {
+  $("#placeholderHolder").empty(); // Ditch the placeholder image now that there will be at least 1 movie poster
+
+  var libCard = $("<div>");
+  libCard.addClass("libCard").attr("id", "libCard" + libCount);
+  $("#libraryCards").prepend(libCard);
+
+  var movieTitle = $("<p>").html(latestTitle).attr("style", "font-size: 24px; font-weight: bold;");
+  var movieYear = $("<p>").html(latestYear).attr("style", "font-size: 18px; font-weight: bold");
+  var moviePoster = $("<img>").attr("src", latestPoster).attr("alt", "Movie poster for " + latestTitle);
+  $("#libCard" + libCount).append(movieTitle, movieYear, moviePoster);
+
+  getWatchmodeResponse(latestImdbId);
+}
 
 function getWatchmodeResponse(searchWatchmode) {
   var watchmodeUrl =
@@ -86,32 +131,60 @@ function getWatchmodeResponse(searchWatchmode) {
     searchWatchmode;
 
   fetch(watchmodeUrl)
-    .then(function (response) {
-      return response.json();
+    .then(function (watchmodeResponse) {
+      return watchmodeResponse.json();
     })
-    .then(function (data) {
-      console.log(data);
-      console.log(JSON.stringify(data));
+    .then(function (watchmodeData) {
+      findSources(watchmodeData.title_results[0].id);
     });
-}
+};
 
-// Prototype movie-saving function below
-// function saveMovie(omdbResponse) {
-//   var movieCard = document.createElement("div");
-//   var movieTitle = document.createElement("h3");
-//   movieTitle.textContent = omdbResponse.Title;
-//   movieCard.appendChild(movieTitle);
-//   //Movie Year
-//   var movieYear = document.createElement("h4");
-//   movieYear.textContent = omdbResponse.Year;
-//   movieCard.appendChild(movieYear);
-//   // Movie Poster
-//   var moviePoster = document.createElement("img");
-//   moviePoster.src = omdbResponse.Poster;
-//   movieCard.appendChild(moviePoster);
-//   toWatch.appendChild(movieCard);
-// }
+function findSources(watchmodeID) {
+  var watchmodeUrl = "https://api.watchmode.com/v1/title/" + watchmodeID + "/sources/?regions=US&apiKey=yiuf9OlLjaQLmIWWTJqlyJi6QSFdlkvTHpBC8nwU";
 
+  fetch(watchmodeUrl)
+  .then( function(watchmodeResponse) {
+    return watchmodeResponse.json();
+  })
+  .then( function(watchmodeData) {
+    displaySources(watchmodeData);
+  })
+};
+
+function displaySources(watchmodeData) {
+  var newBr = $("<br>");
+  $("#libCard" + libCount).append(newBr);
+  var newSpan = $("<span>").html("Available on: ");
+  $("#libCard" + libCount).append(newSpan);
+
+    for(var i = 0; i < watchmodeData.length; i++) {
+      if(watchmodeData[i].source_id == 203) {
+      var newA = $("<a>");
+      newA.attr("href", watchmodeData[i].web_url).text("Netflix ");
+      $("#libCard" + libCount).append(newA);
+    }
+    if(watchmodeData[i].source_id == 372) {
+      var newA = $("<a>");
+      newA.attr("href", watchmodeData[i].web_url).text("Disney+ ");
+      $("#libCard" + libCount).append(newA);
+    }
+    if(watchmodeData[i].source_id == 385) {
+      var newA = $("<a>");
+      newA.attr("href", watchmodeData[i].web_url).text("Hulu ");
+      $("#libCard" + libCount).append(newA);
+    }
+    if(watchmodeData[i].source_id == 387) {
+      var newA = $("<a>");
+      newA.attr("href", watchmodeData[i].web_url).text("HBO Max ");
+      $("#libCard" + libCount).append(newA);
+    }
+    if(watchmodeData[i].source_id == 389) {
+      var newA = $("<a>");
+      newA.attr("href", watchmodeData[i].web_url).text("Peacock ");
+      $("#libCard" + libCount).append(newA);
+    }
+  };
+};
 
 // Drop and Drag Function--
 
