@@ -72,6 +72,7 @@ body {
 }
 
 .hero-body{
+  justify-content: center;
   text-align: center;
   display: flex;
   -ms-flex-align: baseline ;
