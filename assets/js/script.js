@@ -58,7 +58,7 @@ if (event.target == modal) {
 };
 
 function getOmdbResponse(searchString) {
-  var omdbUrl = "http://www.omdbapi.com/?apikey=928c9de&type=movie&t=" + searchString;
+  var omdbUrl = "https://www.omdbapi.com/?apikey=928c9de&type=movie&t=" + searchString;
 
   fetch(omdbUrl)
     .then(function (omdbResponse) {
