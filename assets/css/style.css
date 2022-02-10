@@ -95,3 +95,9 @@ html, body {
  background-color: red;
 }
 }
+
+#libraryBtn {
+  border: 2px solid #f5c518;
+  background-color: #f5c518;
+  display: none;
+}
