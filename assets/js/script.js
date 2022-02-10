@@ -17,7 +17,7 @@ var latestImdbId = "";
 var emptyError = document.createElement("p"); // Create a message for if the user tries to search on nothing
 emptyError.textContent = "Please enter a title before searching"
 
-// Add load localStorage function
+loadStorage();
 
 libBtn.onclick = function(event) {
   event.preventDefault();
@@ -37,7 +37,7 @@ btn.onclick = function(event) {
     $("#modalInside").append(emptyError); // Error out if they forgot to enter something
   } else {
     getOmdbResponse(searchInput.value); // Otherwise, search for the movie
-    searchInput.value = "";
+    searchInput.value = ""; // Reset search field for next search
   }
 };
 
@@ -184,7 +184,56 @@ function displaySources(watchmodeData) {
       $("#libCard" + libCount).append(newA);
     }
   };
+
+  saveToStorage();
 };
+
+function saveToStorage() {
+  var titles = JSON.parse(localStorage.getItem("Library"));
+  var titleArray = [];
+
+  if(titles == null) {
+    titleArray.push(latestTitle);
+    localStorage.setItem("Library", JSON.stringify(titleArray));
+    libCount++;
+  } else {
+    for(var i = 0; i < titles.length; i++) {
+      if(latestTitle == titles[i]) {
+        console.log("in if");
+        libCount++;
+        break;
+      } else {
+        console.log("in else");
+        titles.push(latestTitle);
+        localStorage.setItem("Library", JSON.stringify(titles));
+        libCount++;
+      }
+    }
+  }
+};
+
+function loadStorage() {
+  var titles = JSON.parse(localStorage.getItem("Library"));
+
+  if(titles !== null) {
+    for(var i = 0; i < titles.length; i++) {
+      var omdbUrl = "http://www.omdbapi.com/?apikey=928c9de&type=movie&t=" + titles[i];
+
+      fetch(omdbUrl)
+      .then(function(omdbResponse) {
+        omdbResponse.json()
+        .then(function(omdbData) {
+          latestImdbId = omdbData.imdbID;
+          latestTitle = omdbData.Title;
+          latestYear = omdbData.Year;
+          latestPoster = omdbData.Poster;
+          saveMovie();
+        })
+      })
+    }
+  }
+};
+              
 
 // Drop and Drag Function--
 
