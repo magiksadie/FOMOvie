@@ -1,52 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
-    />
-    <link rel="stylesheet" href="./assets/css/style.css" />
     <title>FOMOvie</title>
+
+    <!-- Bringing in styles, fonts, etc. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" />
+    <link rel="stylesheet" href="./assets/css/style.css" />
   </head>
 
   <body>
+
     <header class="hero is-black has-text-centered is-size-4">
       <div class="hero-body">
         <p class="fomovie">FOMOvie</p>
-        </div>
-      <p class="subtitle">
-        FOMO [fōmō] (noun): a state of mental or emotional strain caused by the fear of missing out</p>
+      </div>
+      
+      <p class="subtitle">FOMO [fōmō] <i>(noun)</i>: a state of mental or emotional strain caused by the fear of missing out</p>
+
     </header>
 
-    <div class="tile is-ancestor is-vcentered is-centered">
-      <div class="tile is-parent is-4 is-vertical">
+    <main class="tile is-ancestor is-vcentered is-centered">
+      <section class="tile is-parent is-4 is-vertical">
+
         <article class="tile is-child box">
-          <p class="title">FOMOvie Search!</p>
+          <p class="title has-text-centered">FOMOvie Search!</p>
+
           <form class="box">
             <div class="field">
-              <label class="label">Movie Name</label>
-              <div class="control">
-                <input
-                  class="input"
-                  id="searchInput"
-                  type="movie"
-                  placeholder=""
-                />
+              <label class="label has-text-centered">Enter A Movie Title:</label>
+              <div class="control has-icons-left">
+                <input class="input is-focused is-rounded" id="searchInput" type="movie" placeholder="" />
+                <span class="icon is-left"><i class="fa-solid fa-video"></i></span>
               </div>
             </div>
+
             <!--Open Modal-->
-            <button id="btnModal" class="button">Search</button>
+            <button id="btnModal" class="button is-centered is-fullwidth is-rounded">Search</button>
+
             <!--Modal Content-->
             <div id="searchModal" class="modal">
               <div class="modal-content">
@@ -54,26 +50,36 @@
               </div>
             </div>
           </form>
-          <p class="subtitle"></p>
+
         </article>
-      </div>
-      <div class="tile is-parent is-4 is-vertical">
+
+      </section>
+
+      <section class="tile is-parent is-4 is-vertical" id="library">
         <article class="tile is-child box" id="to-watch">
-          <p class="title">Library</p>
-          <p class="subtitle">"content"</p>
-          <p>Library cards/tile</p>
-        </article>
-      </div>
-      <div class="tile is-parent is-4 is-vertical is-flex">
-        <article class="tile is-child box">
-          <p class="title">Watched</p>
-          <p class="subtitle">"content"</p>
-          <div class="content">
-            <p>Watched cards/tiles</p>
+          <p class="title has-text-centered">Library</p>
+          <div class="level" id="placeholderHolder">
+            <div class="level-item has-text-centered">
+            <img src="./assets/images/placeholder.jpg" alt=""></img>
           </div>
+        </div>
+
+          <!-- We insert saved searches here -->
+          <div class="content" id="libraryCards"></div>
+
+        </article>
+      </section>
+
+      <div class="tile is-parent is-4 is-vertical is-flex" id="watched">
+        <article class="tile is-child box">
+          <p class="title has-text-centered">Watched</p>
+
+          <!-- And this div holds watched titles -->
+          <div class="content" id="watchedCards"></div>
+
         </article>
       </div>
-    </div>
+    </main>
 
     <footer class="hero is-dark has-text-centered is-size-6">
       <div class="hero-body">
