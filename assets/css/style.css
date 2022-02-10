@@ -50,9 +50,9 @@ h3 {
   color: black;
   border-radius: 5px;
   width: 20%;
-  font-size: larger;
+  font-size: xx-large;
   margin: auto;
-  
+  width: 150px;
 }
 
 .subtitle {
@@ -69,4 +69,29 @@ body {
 
 #searchInput {
   border: 2px solid #f5c518;
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.FOMOvie a:hover {
+  color: black;
+  background-color: #f5c518;
+  border-radius: 3px;
+  color: black;
+}
+
+html, body {
+  height: 100%;
+}
+
+@media screen and (max-width: 1173px) {
+.place {
+  display:none;
+ background-color: red;
+}
 }
