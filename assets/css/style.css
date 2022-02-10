@@ -71,6 +71,16 @@ body {
   border: 2px solid #f5c518;
 }
 
+.hero-body{
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  -ms-flex-align: baseline ;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
 footer {
   position: fixed;
   left: 0;

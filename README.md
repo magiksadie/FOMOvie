@@ -20,7 +20,7 @@ SO THAT I don’t miss out on a film
 
 ### Screenshot of FOMOvie
 
-![Picture of the FOMOvie app](assets/images/screenshot.png)
+![Picture of the FOMOvie app](assets/images/fomovie_screenshot.jpg)
 
 Note: the above is a placeholder image that will be updated before release.
 
@@ -35,4 +35,7 @@ Please check the repository's commit history and associated comments to see more
 
 ### Credits
 
-TBD
+* Daniel B.
+* Eric K.
+* Guled O.
+* Sadie H.
