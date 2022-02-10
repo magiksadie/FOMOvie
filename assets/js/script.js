@@ -55,36 +55,6 @@ function getOmdbResponse(searchString) {
             $("#modalInside").empty();
             searchInput.value = "";
             showSearchResults(omdbData);
-
-            // Movie Title
-            // var movieTitle = document.createElement("h3");
-            // movieTitle.textContent = omdbData.Title;
-            // modalContent.appendChild(movieTitle);
-            // //Movie Year
-            // var movieYear = document.createElement("h4");
-            // movieYear.textContent = omdbData.Year;
-            // modalContent.appendChild(movieYear);
-            // // Movie Poster
-            // var moviePoster = document.createElement("img");
-            // moviePoster.src = omdbData.Poster;
-            // modalContent.appendChild(moviePoster);
-            // // Movie Plot
-            // var moviePlot = document.createElement("h4");
-            // moviePlot.textContent = omdbData.Plot;
-            // modalContent.appendChild(moviePlot);
-            // // Movie Actors
-            // var movieActors = document.createElement("h4");
-            // movieActors.textContent = "Actors: " + omdbData.Actors;
-            // modalContent.appendChild(movieActors);
-            // // Movie Director
-            // var movieDirector = document.createElement("h4");
-            // movieDirector.textContent = "Director: " + omdbData.Director;
-            // modalContent.appendChild(movieDirector);
-            // var saveMovieBtn = document.createElement("button");
-            // saveMovieBtn.textContent = "Save to Library";
-            // modalContent.appendChild(saveMovieBtn);
-            // saveMovie(omdbData);
-            //getWatchmodeResponse(omdbData.imdbID);
         }
         });
       } else {
@@ -123,7 +93,6 @@ function showSearchResults(omdbData) {
   var movieActors = $("<p>").html("<b>Starring:</b> " + omdbData.Actors);
   var saveMovieBtn = $("<button>").text("Save to Library").attr("style", "border: 2px solid #f5c518; background-color: #f5c518;").attr("class", "button is-centered is-rounded");
   $(".searchCard").append(movieTitle, movieYear, moviePoster, moviePlot, movieDirector, movieActors, saveMovieBtn);
-
 };
 
 // function saveMovie(omdbResponse) {
