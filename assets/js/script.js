@@ -67,30 +67,18 @@ function getOmdbResponse(searchString) {
     });
 }
 
-// function getTmdbResponse(searchTmdb) {
-//   var tmdbUrl = "https://api.themoviedb.org/3/find/" + searchTmdb + "?api_key=ec41a34f528d3376af8f21290ccf32a1&external_source=imdb_id";
-
-//   fetch(tmdbUrl)
-//   .then(function(tmdbResponse) {
-//     if (tmdbResponse.ok) {
-//       tmdbResponse.json()
-//       .then(function(tmdbData) {
-//         console.log(tmdbData);
-//         console.log(tmdbData.movie_results[0].id);
-//         console.log(tmdbData.movie_results[0].imdb_id);
-//         getWatchmodeResponse(tmdbData.movie_results[0].imdb_id);
-
-//       });
-//     } else {
-//       // Error handling
-//       alert("Error: " + tmdbResponse.statusText);
-//     }
-//   })
-//   .catch(function(tmdbError) {
-//     // Error handling
-//     alert("Unable to connect to TMDB");
-//   });
-// };
+function showSearchResults(omdbData) {
+  var searchCard = $("<div class='searchCard'>");
+  $("#modalInside").append(searchCard);
+  var movieTitle = $("<p>").html(omdbData.Title).attr("style", "font-size: 24px; font-weight: bold;");
+  var movieYear = $("<p>").html(omdbData.Year).attr("style", "font-size: 18px; font-weight: bold");
+  var moviePoster = $("<img>").attr("src", omdbData.Poster).attr("alt", "Movie poster for " + omdbData.Title);
+  var moviePlot = $("<p>").html("<b>Plot synopsis:</b> " + omdbData.Plot);
+  var movieDirector = $("<p>").html("<b>Directed by:</b> " + omdbData.Director);
+  var movieActors = $("<p>").html("<b>Starring:</b> " + omdbData.Actors);
+  var saveMovieBtn = $("<button>").text("Save to Library").attr("style", "border: 2px solid #f5c518; background-color: #f5c518;").attr("class", "button is-centered is-rounded");
+  $(".searchCard").append(movieTitle, movieYear, moviePoster, moviePlot, movieDirector, movieActors, saveMovieBtn);
+};
 
 function getWatchmodeResponse(searchWatchmode) {
   var watchmodeUrl =
@@ -107,45 +95,24 @@ function getWatchmodeResponse(searchWatchmode) {
     });
 }
 
-// Get the modal
-var modal = document.getElementById("searchModal");
-// Get the button that opens the modal
-var btn = document.getElementById("btnModal");
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-// When the user clicks on the button, open the modal
-btn.onclick = function (event) {
-  event.preventDefault();
-  modal.style.display = "block";
-  getOmdbResponse(searchInput.value);
-  console.log(searchInput.value);
-};
-// When the user clicks on <span> (x), close the modal
-span.onclick = function () {
-  modal.style.display = "none";
-};
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-};
+// Prototype movie-saving function below
+// function saveMovie(omdbResponse) {
+//   var movieCard = document.createElement("div");
+//   var movieTitle = document.createElement("h3");
+//   movieTitle.textContent = omdbResponse.Title;
+//   movieCard.appendChild(movieTitle);
+//   //Movie Year
+//   var movieYear = document.createElement("h4");
+//   movieYear.textContent = omdbResponse.Year;
+//   movieCard.appendChild(movieYear);
+//   // Movie Poster
+//   var moviePoster = document.createElement("img");
+//   moviePoster.src = omdbResponse.Poster;
+//   movieCard.appendChild(moviePoster);
+//   toWatch.appendChild(movieCard);
+// }
 
-function saveMovie(omdbResponse) {
-  var movieCard = document.createElement("div");
-  var movieTitle = document.createElement("h3");
-  movieTitle.textContent = omdbResponse.Title;
-  movieCard.appendChild(movieTitle);
-  //Movie Year
-  var movieYear = document.createElement("h4");
-  movieYear.textContent = omdbResponse.Year;
-  movieCard.appendChild(movieYear);
-  // Movie Poster
-  var moviePoster = document.createElement("img");
-  moviePoster.src = omdbResponse.Poster;
-  movieCard.appendChild(moviePoster);
-  toWatch.appendChild(movieCard);
-}
+
 // Drop and Drag Function--
 
   //class App {
@@ -198,31 +165,3 @@ function saveMovie(omdbResponse) {
 //}
 
 //document.addEventListener("DOMContentLoaded", App.init)
-function showSearchResults(omdbData) {
-  var searchCard = $("<div class='searchCard'>");
-  $("#modalInside").append(searchCard);
-  var movieTitle = $("<p>").html(omdbData.Title).attr("style", "font-size: 24px; font-weight: bold;");
-  var movieYear = $("<p>").html(omdbData.Year).attr("style", "font-size: 18px; font-weight: bold");
-  var moviePoster = $("<img>").attr("src", omdbData.Poster).attr("alt", "Movie poster for " + omdbData.Title);
-  var moviePlot = $("<p>").html("<b>Plot synopsis:</b> " + omdbData.Plot);
-  var movieDirector = $("<p>").html("<b>Directed by:</b> " + omdbData.Director);
-  var movieActors = $("<p>").html("<b>Starring:</b> " + omdbData.Actors);
-  var saveMovieBtn = $("<button>").text("Save to Library").attr("style", "border: 2px solid #f5c518; background-color: #f5c518;").attr("class", "button is-centered is-rounded");
-  $(".searchCard").append(movieTitle, movieYear, moviePoster, moviePlot, movieDirector, movieActors, saveMovieBtn);
-};
-
-// function saveMovie(omdbResponse) {
-//   var movieCard = document.createElement("div");
-//   var movieTitle = document.createElement("h3");
-//   movieTitle.textContent = omdbResponse.Title;
-//   movieCard.appendChild(movieTitle);
-//   //Movie Year
-//   var movieYear = document.createElement("h4");
-//   movieYear.textContent = omdbResponse.Year;
-//   movieCard.appendChild(movieYear);
-//   // Movie Poster
-//   var moviePoster = document.createElement("img");
-//   moviePoster.src = omdbResponse.Poster;
-//   movieCard.appendChild(moviePoster);
-//   toWatch.appendChild(movieCard);
-// }
