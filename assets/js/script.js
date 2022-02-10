@@ -70,31 +70,6 @@ function getOmdbResponse(searchString) {
     });
 }
 
-// function getTmdbResponse(searchTmdb) {
-//   var tmdbUrl = "https://api.themoviedb.org/3/find/" + searchTmdb + "?api_key=ec41a34f528d3376af8f21290ccf32a1&external_source=imdb_id";
-
-//   fetch(tmdbUrl)
-//   .then(function(tmdbResponse) {
-//     if (tmdbResponse.ok) {
-//       tmdbResponse.json()
-//       .then(function(tmdbData) {
-//         console.log(tmdbData);
-//         console.log(tmdbData.movie_results[0].id);
-//         console.log(tmdbData.movie_results[0].imdb_id);
-//         getWatchmodeResponse(tmdbData.movie_results[0].imdb_id);
-
-//       });
-//     } else {
-//       // Error handling
-//       alert("Error: " + tmdbResponse.statusText);
-//     }
-//   })
-//   .catch(function(tmdbError) {
-//     // Error handling
-//     alert("Unable to connect to TMDB");
-//   });
-// };
-
 function getWatchmodeResponse(searchWatchmode) {
   var watchmodeUrl =
     "https://api.watchmode.com/v1/search/?apiKey=yiuf9OlLjaQLmIWWTJqlyJi6QSFdlkvTHpBC8nwU&search_field=imdb_id&search_value=" +
@@ -122,16 +97,24 @@ var span = document.getElementsByClassName("close")[0];
 btn.onclick = function (event) {
   event.preventDefault();
   modal.style.display = "block";
-  getOmdbResponse(searchInput.value);
-  console.log(searchInput.value);
+  if (searchInput.value == "") {
+    var emptyError = document.createElement("p");
+    emptyError.textContent = "Please enter a title before searching"
+    $("#modalInside").append(emptyError);
+  } else {
+    getOmdbResponse(searchInput.value);
+  }
+  
 };
 // When the user clicks on <span> (x), close the modal
 span.onclick = function () {
+  $("#modalInside").empty();
   modal.style.display = "none";
 };
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
   if (event.target == modal) {
+    $("modalInside").empty();
     modal.style.display = "none";
   }
 };
