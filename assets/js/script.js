@@ -21,7 +21,7 @@ loadStorage();
 
 libBtn.onclick = function(event) {
   event.preventDefault();
-  saveMovie();
+  saveMovie(latestTitle);
   modal.style.display = "none";
   $("#modalInside").empty();
   $("#libraryBtn").attr("style", "display: none");
@@ -110,7 +110,7 @@ function showSearchResults(omdbData) {
 };
 
 // Save movie to library when "Add to Library" is clicked
-function saveMovie() {
+function saveMovie(latestTitleTemp) {
   $("#placeholderHolder").empty(); // Ditch the placeholder image now that there will be at least 1 movie poster
 
   var libCard = $("<div>");
@@ -122,10 +122,10 @@ function saveMovie() {
   var moviePoster = $("<img>").attr("src", latestPoster).attr("alt", "Movie poster for " + latestTitle);
   $("#libCard" + libCount).append(movieTitle, movieYear, moviePoster);
 
-  getWatchmodeResponse(latestImdbId);
+  getWatchmodeResponse(latestImdbId, latestTitleTemp);
 }
 
-function getWatchmodeResponse(searchWatchmode) {
+function getWatchmodeResponse(searchWatchmode, latestTitleTemp) {
   var watchmodeUrl =
     "https://api.watchmode.com/v1/search/?apiKey=yiuf9OlLjaQLmIWWTJqlyJi6QSFdlkvTHpBC8nwU&search_field=imdb_id&search_value=" +
     searchWatchmode;
@@ -135,11 +135,11 @@ function getWatchmodeResponse(searchWatchmode) {
       return watchmodeResponse.json();
     })
     .then(function (watchmodeData) {
-      findSources(watchmodeData.title_results[0].id);
+      findSources(watchmodeData.title_results[0].id, latestTitleTemp);
     });
 };
 
-function findSources(watchmodeID) {
+function findSources(watchmodeID, latestTitleTemp) {
   var watchmodeUrl = "https://api.watchmode.com/v1/title/" + watchmodeID + "/sources/?regions=US&apiKey=yiuf9OlLjaQLmIWWTJqlyJi6QSFdlkvTHpBC8nwU";
 
   fetch(watchmodeUrl)
@@ -147,11 +147,11 @@ function findSources(watchmodeID) {
     return watchmodeResponse.json();
   })
   .then( function(watchmodeData) {
-    displaySources(watchmodeData);
+    displaySources(watchmodeData, latestTitleTemp);
   })
 };
 
-function displaySources(watchmodeData) {
+function displaySources(watchmodeData, latestTitleTemp) {
   var newBr = $("<br>");
   $("#libCard" + libCount).append(newBr);
   var newSpan = $("<span>").html("Available on: ");
@@ -185,30 +185,25 @@ function displaySources(watchmodeData) {
     }
   };
 
-  saveToStorage();
+  saveToStorage(latestTitleTemp);
 };
 
-function saveToStorage() {
+function saveToStorage(latestTitleTemp) {
   var titles = JSON.parse(localStorage.getItem("Library"));
   var titleArray = [];
 
   if(titles == null) {
-    titleArray.push(latestTitle);
+    titleArray.push(latestTitleTemp);
     localStorage.setItem("Library", JSON.stringify(titleArray));
     libCount++;
   } else {
-    for(var i = 0; i < titles.length; i++) {
-      if(latestTitle == titles[i]) {
-        console.log("in if");
+      if(titles.includes(latestTitleTemp)) {
         libCount++;
-        break;
       } else {
-        console.log("in else");
-        titles.push(latestTitle);
+        titles.push(latestTitleTemp);
         localStorage.setItem("Library", JSON.stringify(titles));
         libCount++;
       }
-    }
   }
 };
 
@@ -227,7 +222,7 @@ function loadStorage() {
           latestTitle = omdbData.Title;
           latestYear = omdbData.Year;
           latestPoster = omdbData.Poster;
-          saveMovie();
+          saveMovie(latestTitle);
         })
       })
     }
