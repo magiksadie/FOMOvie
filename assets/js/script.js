@@ -212,7 +212,7 @@ function loadStorage() {
 
   if(titles !== null) {
     for(var i = 0; i < titles.length; i++) {
-      var omdbUrl = "http://www.omdbapi.com/?apikey=928c9de&type=movie&t=" + titles[i];
+      var omdbUrl = "https://www.omdbapi.com/?apikey=928c9de&type=movie&t=" + titles[i];
 
       fetch(omdbUrl)
       .then(function(omdbResponse) {
