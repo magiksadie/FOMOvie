@@ -13,12 +13,23 @@ var latestTitle = ""; // Hold OMDB API results for future use
 var latestYear = "";
 var latestPoster = "";
 var latestImdbId = "";
+var latestNetflixStatus = false; // Hold Watchmode info for future
+var latestDisneyStatus = false;
+var latestHuluStatus = false;
+var latestHboStatus = false;
+var latestPeakcockStatus = false;
+var latestNetflixUrl = "";
+var latestDisneyUrl = "";
+var latestHuluUrl = "";
+var latestHboUrl = "";
+var latestPeakcockUrl = "";
 
 var emptyError = document.createElement("p"); // Create a message for if the user tries to search on nothing
 emptyError.textContent = "Please enter a title before searching"
 
 loadStorage();
 
+// Listener for the "Add to Library" button
 libBtn.onclick = function(event) {
   event.preventDefault();
   saveMovie(latestTitle);
@@ -125,9 +136,10 @@ function saveMovie(latestTitleTemp) {
   getWatchmodeResponse(latestImdbId, latestTitleTemp);
 }
 
+// We have to search Watchmode for an IMDB ID to get their DB index before we can retrieve info on a title
 function getWatchmodeResponse(searchWatchmode, latestTitleTemp) {
   var watchmodeUrl =
-    "https://api.watchmode.com/v1/search/?apiKey=yiuf9OlLjaQLmIWWTJqlyJi6QSFdlkvTHpBC8nwU&search_field=imdb_id&search_value=" +
+    "https://api.watchmode.com/v1/search/?apiKey=MuS3n44b8mKauQo1whbqtzMqQZQplKlbiBujelRM&search_field=imdb_id&search_value=" +
     searchWatchmode;
 
   fetch(watchmodeUrl)
@@ -139,8 +151,9 @@ function getWatchmodeResponse(searchWatchmode, latestTitleTemp) {
     });
 };
 
+// Now that we know the Watchmode ID of a movie, query for where it's available
 function findSources(watchmodeID, latestTitleTemp) {
-  var watchmodeUrl = "https://api.watchmode.com/v1/title/" + watchmodeID + "/sources/?regions=US&apiKey=yiuf9OlLjaQLmIWWTJqlyJi6QSFdlkvTHpBC8nwU";
+  var watchmodeUrl = "https://api.watchmode.com/v1/title/" + watchmodeID + "/sources/?regions=US&apiKey=MuS3n44b8mKauQo1whbqtzMqQZQplKlbiBujelRM";
 
   fetch(watchmodeUrl)
   .then( function(watchmodeResponse) {
@@ -151,84 +164,169 @@ function findSources(watchmodeID, latestTitleTemp) {
   })
 };
 
+// Add any stream links found to the Library page
 function displaySources(watchmodeData, latestTitleTemp) {
   var newBr = $("<br>");
   $("#libCard" + libCount).append(newBr);
   var newSpan = $("<span>").html("Available on: ");
   $("#libCard" + libCount).append(newSpan);
 
+  latestNetflixStatus = false;
+  latestDisneyStatus = false;
+  latestHuluStatus = false;
+  latestHboStatus = false;
+  latestPeakcockStatus = false;
+
     for(var i = 0; i < watchmodeData.length; i++) {
       if(watchmodeData[i].source_id == 203) {
       var newA = $("<a>");
       newA.attr("href", watchmodeData[i].web_url).text("Netflix ");
       $("#libCard" + libCount).append(newA);
+      latestNetflixStatus = true;
+      latestNetflixUrl = watchmodeData[i].web_url;
     }
     if(watchmodeData[i].source_id == 372) {
       var newA = $("<a>");
       newA.attr("href", watchmodeData[i].web_url).text("Disney+ ");
       $("#libCard" + libCount).append(newA);
+      latestDisneyStatus = true;
+      latestDisneyUrl = watchmodeData[i].web_url;
     }
     if(watchmodeData[i].source_id == 385) {
       var newA = $("<a>");
       newA.attr("href", watchmodeData[i].web_url).text("Hulu ");
       $("#libCard" + libCount).append(newA);
+      latestHuluStatus = true;
+      latestHuluUrl = watchmodeData[i].web_url;
     }
     if(watchmodeData[i].source_id == 387) {
       var newA = $("<a>");
       newA.attr("href", watchmodeData[i].web_url).text("HBO Max ");
       $("#libCard" + libCount).append(newA);
+      latestHboStatus = true;
+      latestHboUrl = watchmodeData[i].web_url;
     }
     if(watchmodeData[i].source_id == 389) {
       var newA = $("<a>");
       newA.attr("href", watchmodeData[i].web_url).text("Peacock ");
       $("#libCard" + libCount).append(newA);
+      latestPeakcockStatus = true;
+      latestPeacockUrl = watchmodeData[i].web_url;
     }
   };
 
+  // And save the movie's info for future use
   saveToStorage(latestTitleTemp);
 };
 
+// Save an array of objects, 1 obj per movie, holding title, year, poster URL, and links to stream
 function saveToStorage(latestTitleTemp) {
-  var titles = JSON.parse(localStorage.getItem("Library"));
-  var titleArray = [];
+  var storedTitles = JSON.parse(localStorage.getItem("Library"));
+  var titleObj = {};
 
-  if(titles == null) {
-    titleArray.push(latestTitleTemp);
-    localStorage.setItem("Library", JSON.stringify(titleArray));
-    libCount++;
-  } else {
-      if(titles.includes(latestTitleTemp)) {
+    // If local storage is empty, populate it with this first saved title
+    if(storedTitles == null) {
+      titleObj.title = latestTitleTemp;
+      titleObj.year = latestYear;
+      titleObj.poster = latestPoster;
+      if(latestNetflixStatus) {
+        titleObj.netflixUrl = latestNetflixUrl;
+      }
+      if(latestDisneyStatus) {
+        titleObj.disneyUrl = latestDisneyUrl;
+      }
+      if(latestHuluStatus) {
+        titleObj.huluUrl = latestHuluUrl;
+      }
+      if(latestHboStatus) {
+        titleObj.hboUrl = latestHboUrl;
+      }
+      if(latestPeakcockStatus) {
+        titleObj.peacockUrl = latestPeakcockUrl;
+      }
+      localStorage.setItem("Library", JSON.stringify([titleObj]));
+      libCount++;
+    } else {
+      // If the title we're trying to save is already in storage, nevermind
+      if(storedTitles.some(temp => temp.title == latestTitleTemp)) {
         libCount++;
       } else {
-        titles.push(latestTitleTemp);
-        localStorage.setItem("Library", JSON.stringify(titles));
-        libCount++;
+          titleObj.title = latestTitleTemp;
+          titleObj.year = latestYear;
+          titleObj.poster = latestPoster;
+          if(latestNetflixStatus) {
+            titleObj.netflixUrl = latestNetflixUrl;
+          }
+          if(latestDisneyStatus) {
+            titleObj.disneyUrl = latestDisneyUrl;
+          }
+          if(latestHuluStatus) {
+            titleObj.huluUrl = latestHuluUrl;
+          }
+          if(latestHboStatus) {
+            titleObj.hboUrl = latestHboUrl;
+          }
+          if(latestPeakcockStatus) {
+            titleObj.peacockUrl = latestPeakcockUrl;
+          }
+          storedTitles.push(titleObj);
+          localStorage.setItem("Library", JSON.stringify(storedTitles));
+          libCount++;
       }
-  }
-};
+    }
+  };
 
 function loadStorage() {
-  var titles = JSON.parse(localStorage.getItem("Library"));
+  var storedTitles = JSON.parse(localStorage.getItem("Library"));
 
-  if(titles !== null) {
-    for(var i = 0; i < titles.length; i++) {
-      var omdbUrl = "https://www.omdbapi.com/?apikey=928c9de&type=movie&t=" + titles[i];
+  if(storedTitles == null) {
+    // Do nothing
+  } else {
+    $("#placeholderHolder").empty();
+    for(var i = 0; i < storedTitles.length; i++) {
+      var libCard = $("<div>");
+      libCard.addClass("libCard").attr("id", "libCard" + libCount);
+      $("#libraryCards").prepend(libCard);
+    
+      var movieTitle = $("<p>").html(storedTitles[i].title).attr("style", "font-size: 24px; font-weight: bold;");
+      var movieYear = $("<p>").html(storedTitles[i].year).attr("style", "font-size: 18px; font-weight: bold");
+      var moviePoster = $("<img>").attr("src", storedTitles[i].poster).attr("alt", "Movie poster for " + storedTitles[i].title);
+      $("#libCard" + libCount).append(movieTitle, movieYear, moviePoster);
 
-      fetch(omdbUrl)
-      .then(function(omdbResponse) {
-        omdbResponse.json()
-        .then(function(omdbData) {
-          latestImdbId = omdbData.imdbID;
-          latestTitle = omdbData.Title;
-          latestYear = omdbData.Year;
-          latestPoster = omdbData.Poster;
-          saveMovie(latestTitle);
-        })
-      })
+      if(storedTitles[i].netflixUrl || storedTitles[i].disneyUrl || storedTitles[i].huluUrl || storedTitles[i].hboUrl || storedTitles[i].peacockUrl) {
+        var newBr = $("<br>");
+        $("#libCard" + libCount).append(newBr);
+        var newSpan = $("<span>").html("Available on: ");
+        $("#libCard" + libCount).append(newSpan);
+        if(storedTitles[i].netflixUrl) {
+          var newA = $("<a>");
+          newA.attr("href", storedTitles[i].netflixUrl).text("Netflix ");
+          $("#libCard" + libCount).append(newA);
+        }
+        if(storedTitles[i].disneyUrl) {
+          var newA = $("<a>");
+          newA.attr("href", storedTitles[i].disneyUrl).text("Disney+ ");
+          $("#libCard" + libCount).append(newA);
+        }
+        if(storedTitles[i].huluUrl) {
+          var newA = $("<a>");
+          newA.attr("href", storedTitles[i].huluUrl).text("Hulu ");
+          $("#libCard" + libCount).append(newA);
+        }
+        if(storedTitles[i].hboUrl) {
+          var newA = $("<a>");
+          newA.attr("href", storedTitles[i].hboUrl).text("HBO Max ");
+          $("#libCard" + libCount).append(newA);
+        }
+        if(storedTitles[i].peacockUrl) {
+          var newA = $("<a>");
+          newA.attr("href", storedTitles[i].peacockUrl).text("Peacock ");
+          $("#libCard" + libCount).append(newA);
+        }
+      }
     }
   }
 };
-              
 
 // Drop and Drag Function--
 
