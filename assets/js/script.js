@@ -13,6 +13,17 @@ var latestTitle = ""; // Hold OMDB API results for future use
 var latestYear = "";
 var latestPoster = "";
 var latestImdbId = "";
+var latestNetflixStatus = false;
+var latestDisneyStatus = false;
+var latestHuluStatus = false;
+var latestHboStatus = false;
+var latestPeakcockStatus = false;
+var latestNetflixUrl = "";
+var latestDisneyUrl = "";
+var latestHuluUrl = "";
+var latestHboUrl = "";
+var latestPeakcockUrl = "";
+
 
 var emptyError = document.createElement("p"); // Create a message for if the user tries to search on nothing
 emptyError.textContent = "Please enter a title before searching"
@@ -127,7 +138,7 @@ function saveMovie(latestTitleTemp) {
 
 function getWatchmodeResponse(searchWatchmode, latestTitleTemp) {
   var watchmodeUrl =
-    "https://api.watchmode.com/v1/search/?apiKey=yiuf9OlLjaQLmIWWTJqlyJi6QSFdlkvTHpBC8nwU&search_field=imdb_id&search_value=" +
+    "https://api.watchmode.com/v1/search/?apiKey=MuS3n44b8mKauQo1whbqtzMqQZQplKlbiBujelRM&search_field=imdb_id&search_value=" +
     searchWatchmode;
 
   fetch(watchmodeUrl)
@@ -140,7 +151,7 @@ function getWatchmodeResponse(searchWatchmode, latestTitleTemp) {
 };
 
 function findSources(watchmodeID, latestTitleTemp) {
-  var watchmodeUrl = "https://api.watchmode.com/v1/title/" + watchmodeID + "/sources/?regions=US&apiKey=yiuf9OlLjaQLmIWWTJqlyJi6QSFdlkvTHpBC8nwU";
+  var watchmodeUrl = "https://api.watchmode.com/v1/title/" + watchmodeID + "/sources/?regions=US&apiKey=MuS3n44b8mKauQo1whbqtzMqQZQplKlbiBujelRM";
 
   fetch(watchmodeUrl)
   .then( function(watchmodeResponse) {
@@ -157,31 +168,47 @@ function displaySources(watchmodeData, latestTitleTemp) {
   var newSpan = $("<span>").html("Available on: ");
   $("#libCard" + libCount).append(newSpan);
 
+  latestNetflixStatus = false;
+  latestDisneyStatus = false;
+  latestHuluStatus = false;
+  latestHboStatus = false;
+  latestPeakcockStatus = false;
+
     for(var i = 0; i < watchmodeData.length; i++) {
       if(watchmodeData[i].source_id == 203) {
       var newA = $("<a>");
       newA.attr("href", watchmodeData[i].web_url).text("Netflix ");
       $("#libCard" + libCount).append(newA);
+      latestNetflixStatus = true;
+      latestNetflixUrl = watchmodeData[i].web_url;
     }
     if(watchmodeData[i].source_id == 372) {
       var newA = $("<a>");
       newA.attr("href", watchmodeData[i].web_url).text("Disney+ ");
       $("#libCard" + libCount).append(newA);
+      latestDisneyStatus = true;
+      latestDisneyUrl = watchmodeData[i].web_url;
     }
     if(watchmodeData[i].source_id == 385) {
       var newA = $("<a>");
       newA.attr("href", watchmodeData[i].web_url).text("Hulu ");
       $("#libCard" + libCount).append(newA);
+      latestHuluStatus = true;
+      latestHuluUrl = watchmodeData[i].web_url;
     }
     if(watchmodeData[i].source_id == 387) {
       var newA = $("<a>");
       newA.attr("href", watchmodeData[i].web_url).text("HBO Max ");
       $("#libCard" + libCount).append(newA);
+      latestHboStatus = true;
+      latestHboUrl = watchmodeData[i].web_url;
     }
     if(watchmodeData[i].source_id == 389) {
       var newA = $("<a>");
       newA.attr("href", watchmodeData[i].web_url).text("Peacock ");
       $("#libCard" + libCount).append(newA);
+      latestPeakcockStatus = true;
+      latestPeacockUrl = watchmodeData[i].web_url;
     }
   };
 
@@ -189,44 +216,84 @@ function displaySources(watchmodeData, latestTitleTemp) {
 };
 
 function saveToStorage(latestTitleTemp) {
-  var titles = JSON.parse(localStorage.getItem("Library"));
-  var titleArray = [];
+  var storedTitles = JSON.parse(localStorage.getItem("Library"));
+  var titleObj = {};
 
-  if(titles == null) {
-    titleArray.push(latestTitleTemp);
-    localStorage.setItem("Library", JSON.stringify(titleArray));
-    libCount++;
+    if(storedTitles == null) {
+      titleObj.title = latestTitleTemp;
+      titleObj.year = latestYear;
+      titleObj.poster = latestPoster;
+      if(latestNetflixStatus) {
+        titleObj.netflixUrl = latestNetflixUrl;
+      }
+      if(latestDisneyStatus) {
+        titleObj.disneyUrl = latestDisneyUrl;
+      }
+      if(latestHuluStatus) {
+        titleObj.huluUrl = latestHuluUrl;
+      }
+      if(latestHboStatus) {
+        titleObj.hboUrl = latestHboUrl;
+      }
+      if(latestPeakcockStatus) {
+        titleObj.peacockUrl = latestPeakcockUrl;
+      }
+      localStorage.setItem("Library", JSON.stringify([titleObj]));
+      libCount++;
   } else {
-      if(titles.includes(latestTitleTemp)) {
+    for(var i = 0; i < storedTitles.length; i++) {
+      if(storedTitles[i].title == latestTitleTemp) {
         libCount++;
+        break;
       } else {
-        titles.push(latestTitleTemp);
-        localStorage.setItem("Library", JSON.stringify(titles));
+        titleObj.title = latestTitleTemp;
+        titleObj.year = latestYear;
+        titleObj.poster = latestPoster;
+        if(latestNetflixStatus) {
+          titleObj.netflixUrl = latestNetflixUrl;
+        }
+        if(latestDisneyStatus) {
+          titleObj.disneyUrl = latestDisneyUrl;
+        }
+        if(latestHuluStatus) {
+          titleObj.huluUrl = latestHuluUrl;
+        }
+        if(latestHboStatus) {
+          titleObj.hboUrl = latestHboUrl;
+        }
+        if(latestPeakcockStatus) {
+          titleObj.peacockUrl = latestPeakcockUrl;
+        }
+        storedTitles.push(titleObj);
+        localStorage.setItem("Library", JSON.stringify(storedTitles));
         libCount++;
       }
+    }
   }
 };
 
 function loadStorage() {
   var titles = JSON.parse(localStorage.getItem("Library"));
 
-  if(titles !== null) {
-    for(var i = 0; i < titles.length; i++) {
-      var omdbUrl = "http://www.omdbapi.com/?apikey=928c9de&type=movie&t=" + titles[i];
+  console.log(titles);
 
-      fetch(omdbUrl)
-      .then(function(omdbResponse) {
-        omdbResponse.json()
-        .then(function(omdbData) {
-          latestImdbId = omdbData.imdbID;
-          latestTitle = omdbData.Title;
-          latestYear = omdbData.Year;
-          latestPoster = omdbData.Poster;
-          saveMovie(latestTitle);
-        })
-      })
-    }
-  }
+  // if(titles !== null) {
+  //   for(var i = 0; i < titles.length; i++) {
+  //     var omdbUrl = "http://www.omdbapi.com/?apikey=928c9de&type=movie&t=" + titles[i];
+
+  //     fetch(omdbUrl)
+  //     .then(function(omdbResponse) {
+  //       omdbResponse.json()
+  //       .then(function(omdbData) {
+  //         latestImdbId = omdbData.imdbID;
+  //         latestTitle = omdbData.Title;
+  //         latestYear = omdbData.Year;
+  //         latestPoster = omdbData.Poster;
+  //         saveMovie(latestTitle);
+  //       })
+  //     })
+  //   }
+  // }
 };
               
 
