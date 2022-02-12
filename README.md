@@ -22,8 +22,6 @@ SO THAT I don’t miss out on a film
 
 ![Picture of the FOMOvie app](assets/images/fomovie_screenshot.jpg)
 
-Note: the above is a placeholder image that will be updated before release.
-
 ### Public APIs Used
 
 * OMDB
