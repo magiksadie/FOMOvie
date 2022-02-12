@@ -325,7 +325,8 @@ function loadStorage() {
         }
       }
     }
-  };
+  }
+};
 
 // Drop and Drag Function--
 
