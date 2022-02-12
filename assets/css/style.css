@@ -65,8 +65,20 @@ h3 {
 
 body {
   background-color: #1f1f1f;
+
+  margin-bottom: 100px;
+  
 }
 
+main {
+  max-height: 80%;
+}
+
+#libraryCards {
+  overflow: scroll;
+  max-height: 600px;
+  
+}
 #searchInput {
   border: 2px solid #f5c518;
 }
