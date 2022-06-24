@@ -195,31 +195,60 @@ function saveToStorage(movie) {
         localStorage.setItem("Library", JSON.stringify(titles));
         libCount++;
       }
-  }
-};
+    }
+  };
 
 function loadStorage() {
-  var titles = JSON.parse(localStorage.getItem("Library"));
+  var storedTitles = JSON.parse(localStorage.getItem("Library"));
 
-  if(titles !== null) {
-    for(var i = 0; i < titles.length; i++) {
-      var omdbUrl = "http://www.omdbapi.com/?apikey=928c9de&type=movie&t=" + titles[i];
+  if(storedTitles == null) {
+    // Do nothing
+  } else {
+    $("#placeholderHolder").empty();
+    for(var i = 0; i < storedTitles.length; i++) {
+      var libCard = $("<div>");
+      libCard.addClass("libCard").attr("id", "libCard" + libCount);
+      $("#libraryCards").prepend(libCard);
+    
+      var movieTitle = $("<p>").html(storedTitles[i].title).attr("style", "font-size: 24px; font-weight: bold;");
+      var movieYear = $("<p>").html(storedTitles[i].year).attr("style", "font-size: 18px; font-weight: bold");
+      var moviePoster = $("<img>").attr("src", storedTitles[i].poster).attr("alt", "Movie poster for " + storedTitles[i].title);
+      $("#libCard" + libCount).append(movieTitle, movieYear, moviePoster);
 
-      fetch(omdbUrl)
-      .then(function(omdbResponse) {
-        omdbResponse.json()
-        .then(function(omdbData) {
-          latestImdbId = omdbData.imdbID;
-          latestTitle = omdbData.Title;
-          latestYear = omdbData.Year;
-          latestPoster = omdbData.Poster;
-          saveMovie(latestTitle);
-        })
-      })
+      if(storedTitles[i].netflixUrl || storedTitles[i].disneyUrl || storedTitles[i].huluUrl || storedTitles[i].hboUrl || storedTitles[i].peacockUrl) {
+        var newBr = $("<br>");
+        $("#libCard" + libCount).append(newBr);
+        var newSpan = $("<span>").html("Available on: ");
+        $("#libCard" + libCount).append(newSpan);
+        if(storedTitles[i].netflixUrl) {
+          var newA = $("<a>");
+          newA.attr("href", storedTitles[i].netflixUrl).text("Netflix ");
+          $("#libCard" + libCount).append(newA);
+        }
+        if(storedTitles[i].disneyUrl) {
+          var newA = $("<a>");
+          newA.attr("href", storedTitles[i].disneyUrl).text("Disney+ ");
+          $("#libCard" + libCount).append(newA);
+        }
+        if(storedTitles[i].huluUrl) {
+          var newA = $("<a>");
+          newA.attr("href", storedTitles[i].huluUrl).text("Hulu ");
+          $("#libCard" + libCount).append(newA);
+        }
+        if(storedTitles[i].hboUrl) {
+          var newA = $("<a>");
+          newA.attr("href", storedTitles[i].hboUrl).text("HBO Max ");
+          $("#libCard" + libCount).append(newA);
+        }
+        if(storedTitles[i].peacockUrl) {
+          var newA = $("<a>");
+          newA.attr("href", storedTitles[i].peacockUrl).text("Peacock ");
+          $("#libCard" + libCount).append(newA);
+        }
+      }
     }
   }
 };
-              
 
 // Drop and Drag Function--
 

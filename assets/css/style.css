@@ -55,6 +55,10 @@ h3 {
   width: 150px;
 }
 
+.FOMOvie {
+  text-align: center;
+}
+
 .subtitle {
   margin-bottom: 15px;
 }
@@ -65,8 +69,18 @@ h3 {
 
 body {
   background-color: #1f1f1f;
+  margin-bottom: 100px;
 }
 
+main {
+  max-height: 65%;
+}
+
+#libraryCards {
+  overflow: scroll;
+  max-height: 700px;
+  
+}
 #searchInput {
   border: 2px solid #f5c518;
 }
@@ -74,6 +88,7 @@ body {
 .hero-body{
   justify-content: center;
   text-align: center;
+  justify-content: center;
   display: flex;
   -ms-flex-align: baseline ;
   left: 0;
